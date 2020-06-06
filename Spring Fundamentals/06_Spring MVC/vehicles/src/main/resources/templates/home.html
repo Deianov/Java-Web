@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Auto Dealer Shop</title>
+    <th:block th:insert="fragments/general.html :: links"></th:block>
+</head>
+<body>
+<main class="main">
+    <th:block th:insert="fragments/general.html :: nav"></th:block>
+    <div class="container-fluid">
+        <h2 class="text-center text-white ">Auto Dealer Shop</h2>
+        <hr style="width: 50%"/>
+        <h4 class="font-italic text-center text-white ">
+            By clicking the buttons below you can check our car deals or upload a
+            brand new.
+        </h4>
+        <br/>
+        <div class="text-center">
+            <a class="btn btn-secondary text-center mr-4" href="/offers/add">Upload Offer</a>
+            <a class="btn btn-secondary text-center ml-4" href="/offers">All Offers</a>
+        </div>
+    </div>
+<!--    <th:block th:insert="fragments/general.html :: footer"></th:block>-->
+</main>
+</body>
+</html>
