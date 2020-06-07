@@ -7,7 +7,7 @@
 </head>
 <body>
 <main>
-    <th:block th:insert="fragments/general.html :: nav"></th:block>
+    <nav th:replace="fragments/nav.html"></nav>
     <div class="container">
         <h2 class="text-center text-white mt-5">Car Details</h2>
         <hr style="width: 50%"/>
@@ -18,31 +18,30 @@
                 <div class="row">
                     <div class="col">
                         <h2>Car Info:</h2>
-                        <h4>Car brand</h4>
-                        <h4>Car model</h4>
-                        <h4>Car year</h4>
-                        <h4>Engine</h4>
-                        <h4>Transmission</h4>
+                        <h4>Car brand: <span th:text="${offer.model.brand.name}" /></h4>
+                        <h4>Car model: <span th:text="*{model.name}" /></h4>
+                        <h4>Car year: <span th:text="*{year}" /></h4></h4>
+                        <h4>Engine: <span th:text="*{engine}" /></h4></h4>
+                        <h4>Transmission: <span th:text="*{transmission}" /></h4></h4>
                     </div>
                     <div class="col">
-                        <h2>Offer Info:</h2>
-                        <h4>Seller username</h4>
-                        <h4>Price</h4>
-                        <h4>Modified</h4>
+                        <h2>Offer Info: </h2>
+                        <h4>Seller username: Pesho</h4>
+                        <h4>Price: <span th:text="*{price}" /></h4></h4>
+                        <h4>Modified: today</h4>
                     </div>
                 </div>
 
                 <div class="form-group">
                         <label for="description">Description</label>
                         <br>
-                        <textarea class="bg-dark text-white" name="description" id="description"
+                        <textarea class="bg-dark text-white" name="description" id="description" th:text ="*{description}"
                                   disabled >Offer description</textarea>
 
                 </div>
 
-                <h4><a class="btn-outline-danger" href="/cars/delete/id">Delete</a></h4>
+                <h4><a class="btn-outline-danger" th:href="@{/offers/delete/{id}(id=${offer.id})}">Delete</a></h4>
             </div>
-
 
         </div>
     </div>

@@ -7,7 +7,7 @@
 </head>
 <body>
 <main class="main">
-    <th:block th:insert="fragments/general.html :: nav"></th:block>
+    <nav th:replace="fragments/nav.html"></nav>
     <div class="container-fluid">
         <h2 class="text-center text-white">Add Brand</h2>
         <form class="mt-lg-5 w-15 h-50" th:action="@{/brands/add}" th:method="post">

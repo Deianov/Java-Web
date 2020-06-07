@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Auto Dealer Shop</title>
+    <th:block th:insert="fragments/general.html :: links"></th:block>
+</head>
+<body>
+<main class="main">
+    <nav th:replace="fragments/nav.html"></nav>
+    <div class="container">
+        <h2 class="text-center text-white">Upload Offer</h2>
+        <form th:object="${offer}" method="POST" class="mx-auto col-md-6 d-flex flex-column justify-content-center">
+            <div class="form-group ">
+                <label class="text-center text-white font-weight-bold" for="category">Vehicle Category</label>
+                <select th:field="*{category}" id="category" class="form-control">
+                    <option th:each="category : ${T(vehicles.model.enums.VehicleCategory).values()}" th:value="${category}"
+                            th:text="${category}" th:selected="${offer.category == category}">
+                        Vehicle Category
+                    </option>
+                </select>
+            </div>
+            <div class="form-group ">
+                <label class="text-center text-white font-weight-bold" for="model">Model</label>
+                <select th:field="*{model.id}" id="model" class="form-control">
+                    <option value="">- Select a model -</option>
+                    <optgroup th:each="brand : ${brands}" th:label="|-- ${brand.name} --|">
+                        <option th:each="model : ${brand.models}" th:value="${model.id}"
+                                th:text="|   ${brand.name} ${model.name}|"
+                                th:selected="${offer.model != null && model.id == offer.model.id}">
+                            Model
+                        </option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group ">
+                <label class="text-center text-white font-weight-bold" for="engine">Engine</label>
+                <select th:field="*{engine}" id="engine" class="form-control">
+                    <option value="">- Select engine type -</option>
+                    <option th:each="eng_type : ${T(vehicles.model.enums.EngineType).values()}" th:value="${eng_type}"
+                            th:text="${eng_type}" th:selected="${offer.engine == eng_type}">
+                        Engine type
+                    </option>
+                </select>
+            </div>
+            <div class="form-group ">
+                <label class="text-center text-white font-weight-bold" for="transmission">Transmission</label>
+                <select th:field="*{transmission}" id="transmission" class="form-control">
+                    <option value="">- Select transmission type -</option>
+                    <option th:each="trans_type : ${T(vehicles.model.enums.TransmissionType).values()}" th:value="${trans_type}"
+                            th:text="${trans_type}" th:selected="${offer.transmission == trans_type}">
+                        Transmission type
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="year" class="text-white font-weight-bold">Year</label>
+                <input th:field="*{year}" id="year" type="number" min="1900" max="2099" step="1" class="form-control"
+                       placeholder="Manufacturing year" />
+            </div>
+            <div class="form-group">
+                <label for="mileage" class="text-white font-weight-bold">Mileage</label>
+                <input th:field="*{mileage}" id="mileage" type="number" min="0" max="900000" step="1000" class="form-control"
+                       placeholder="Mileage in kilometers" />
+            </div>
+            <div class="form-group">
+                <label for="price" class="text-white font-weight-bold">Price</label>
+                <input th:field="*{price}" id="price" type="number" min="0" step="100" class="form-control" placeholder="Suggested price" />
+            </div>
+            <div class="form-group">
+                <label class="text-white font-weight-bold" for="description">Description</label>
+                <textarea th:field="*{description}" id="description" type="textarea" class="form-control" rows="3" cols="80"
+                          placeholder="Description"></textarea>
+            </div>
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" value="Submit Offer"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

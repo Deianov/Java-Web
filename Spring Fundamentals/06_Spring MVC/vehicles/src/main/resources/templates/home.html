@@ -9,7 +9,7 @@
 <main class="main">
     <th:block th:insert="fragments/general.html :: nav"></th:block>
     <div class="container-fluid">
-        <h2 class="text-center text-white ">Auto Dealer Shop</h2>
+        <h2 class="text-center text-white">Auto Dealer Shop</h2>
         <hr style="width: 50%"/>
         <h4 class="font-italic text-center text-white ">
             By clicking the buttons below you can check our car deals or upload a
@@ -18,10 +18,10 @@
         <br/>
         <div class="text-center">
             <a class="btn btn-secondary text-center mr-4" href="/offers/add">Upload Offer</a>
-            <a class="btn btn-secondary text-center ml-4" href="/offers">All Offers</a>
+            <a class="btn btn-secondary text-center ml-4" href="/offers">Offers</a>
         </div>
     </div>
-<!--    <th:block th:insert="fragments/general.html :: footer"></th:block>-->
+    <footer th:replace="fragments/general.html :: footer"></footer>
 </main>
 </body>
 </html>

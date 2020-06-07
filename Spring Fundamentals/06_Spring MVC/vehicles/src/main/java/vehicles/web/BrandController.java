@@ -2,6 +2,7 @@ package vehicles.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +21,15 @@ public class BrandController {
         this.service = service;
     }
 
+    @GetMapping
+    public String brands(Model model){
+        model.addAttribute("brands", service.getBrands());
+        return "brands";
+    }
+
     @GetMapping("/add")
     public String add(){
-        return "brand-add";
+        return "brands-add";
     }
 
     @PostMapping("/add")

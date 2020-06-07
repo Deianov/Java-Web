@@ -26,7 +26,7 @@ public class ModelController {
     @GetMapping("/add")
     public ModelAndView add(ModelAndView view){
         view.addObject("brands", brandService.getBrands());
-        view.setViewName("model-add");
+        view.setViewName("models-add");
         return view;
     }
 

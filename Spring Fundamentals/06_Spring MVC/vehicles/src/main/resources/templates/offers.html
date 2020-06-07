@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Auto Dealer Shop</title>
+    <th:block th:insert="fragments/general.html :: links"></th:block>
+</head>
+<body>
+<main>
+    <nav th:replace="fragments/nav.html"></nav>
+    <div class="container">
+        <h2 class="text-center text-white mt-5">Auto Dealer Shop Offers</h2>
+        <hr style="width: 50%"/>
+        <div class='row mb-4 d-flex justify-content-around'>
+
+            <div th:each="offer, offerStat: ${offers}" class="col-md-4 d-flex flex-column bg-text mb-3">
+                <h2>Car brand: <span th:text="${offer.model.brand.name}" /></h2>
+                <h4>Model: <span th:text="${offer.model.name}" /></h4>
+                <h4>Year: <span th:text="${offer.year}" /></h4>
+                <h4>Engine: <span th:text="${offer.engine}" /></h4>
+                <h4><a class="btn-block" th:href="@{/offers/details/{id}(id=${offer.id})}">Details</a></h4>
+            </div>
+
+        </div>
+    </div>
+</main>
+</body>
+</html>

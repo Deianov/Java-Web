@@ -25,7 +25,6 @@ public class Offer {
     private Model model;
 
     @NotNull
-    @PastOrPresent
     @Min(1900)
     private Integer year;
 
@@ -44,7 +43,6 @@ public class Offer {
     private String description;
 
     @NotNull
-    @PastOrPresent
     @Positive
     private Double price;
 
