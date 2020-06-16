@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head('Auto Dealer Shop: Add Brand')"></head>
+<body>
+<main class="main">
+    <nav th:replace="~{fragments/menu.html}"></nav>
+    <div class="container-fluid">
+        <h2 class="text-center text-white">Add Brand</h2>
+        <form class="mt-lg-5 w-15 h-50" th:action="@{/brands/add}" th:method="post">
+            <div class="col col-md-12">
+                <div class="form-group">
+                    <div class="label-holder d-flex justify-content-center">
+                        <label class="text-center text-white font-weight-bold" for="name">Enter Brand Name
+                            <input type="text" class="form-control" placeholder="Brand name" name="name" id="name">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-md-4"></div>
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex justify-content-center">
+                        <input type="submit" class="btn btn-secondary" value="Add Brand"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer th:replace="fragments/foot.html"></footer>
+    <div th:replace="fragments/foot-js.html"></div>
+</main>
+</body>
+</html>
