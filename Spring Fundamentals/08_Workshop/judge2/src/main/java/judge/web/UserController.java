@@ -1,17 +1,14 @@
 package judge.web;
 
+import judge.constant.Constants;
+import judge.exception.AlreadyExistsException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 import judge.model.binding.UserRegisterBindingModel;
-import judge.model.binding.UserLoginBidingModel;
 import judge.model.service.UserServiceModel;
 import judge.service.UserService;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,7 +18,7 @@ import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
 @Controller
-@RequestMapping("/users") // prefix
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -34,65 +31,71 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model) {
+        if(model.containsAttribute("password")) {
+            model.addAttribute("password", "");
+        }
         return "login";
     }
 
     @PostMapping("/login")
-    public ModelAndView loginConfirm(@Valid @ModelAttribute("user")UserLoginBidingModel userLoginBidingModel,
-                                     BindingResult bindingResult,
-                                     ModelAndView modelAndView,
-                                     HttpSession httpSession){
-
-        if(bindingResult.hasErrors()){
-            modelAndView.setViewName("redirect:/users/login");
-        } else {
-            modelAndView.setViewName("redirect:/");
-        }
-
-        // TODO: 16.06.2020 validation
-
+    public String loginConfirm(@RequestParam("username") String username,
+                               @RequestParam("password") String password,
+                               RedirectAttributes redirectAttributes,
+                               HttpSession httpSession) {
         try {
-            UserServiceModel userServiceModel = userService
-                    .login(userLoginBidingModel.getUsername(), userLoginBidingModel.getPassword());
-
-            // TODO: 16.06.2020 session id ???
+            UserServiceModel userServiceModel = userService.login(username, password);
             httpSession.setAttribute("user", userServiceModel);
             httpSession.setAttribute("id", userServiceModel.getId());
 
         } catch (NoSuchElementException e) {
-            modelAndView.setViewName("redirect:/users/login");
+            redirectAttributes.addFlashAttribute("username", username);
+            redirectAttributes.addFlashAttribute("errors", Constants.USER_LOGIN_INCORRECT_MESSAGE);
+            return "redirect:/users/login";
         }
-        return modelAndView;
+        return "redirect:/";
     }
 
     @GetMapping("/register")
-    public String register(@ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel userRegisterBindingModel,
-                           Model model) {
-
+    public String register(Model model) {
         if (!model.containsAttribute("userRegisterBindingModel")) {
             model.addAttribute("userRegisterBindingModel", new UserRegisterBindingModel());
+            model.addAttribute("unableToRegister", false);
         }
         return "register";
     }
 
     @PostMapping("/register")
-    public ModelAndView registerConfirm(@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel userRegisterBindingModel,
-                                        BindingResult bindingResult,
-                                        ModelAndView modelAndView,
-                                        RedirectAttributes redirectAttributes) {
+    public String registerConfirm(@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel bindingModel,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
+        boolean doRedirect = false;
 
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel);
-            modelAndView.setViewName("redirect:/users/register");
-
+        if (bindingResult.hasErrors()) {
+            doRedirect = true;
+        } else if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())) {
+            doRedirect = true;
+            bindingResult.rejectValue("confirmPassword", "error.userRegisterBindingModel", Constants.USER_PASSWORDS_DOES_NOT_MATCH_MESSAGE);
         } else {
-            UserServiceModel model = this.userService
-                    .registerUser(this.modelMapper.map(userRegisterBindingModel, UserServiceModel.class));
+            try {
+                this.userService.registerUser(this.modelMapper.map(bindingModel, UserServiceModel.class));
 
-            modelAndView.setViewName("redirect:/users/login");
+            } catch (AlreadyExistsException ex) {
+                doRedirect = true;
+                bindingResult.rejectValue(ex.getField(), "error.userRegisterBindingModel", ex.getMessage());
+
+            } catch (Exception ex) {
+                doRedirect = true;
+                redirectAttributes.addFlashAttribute("unableToRegister", Constants.USER_REGISTER_EXCEPTION_MESSAGE);
+            }
         }
-        return modelAndView;
+
+        if (doRedirect) {
+            redirectAttributes.addFlashAttribute("userRegisterBindingModel", bindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel", bindingResult);
+            return "redirect:/users/register";
+        }
+        return "redirect:/users/login";
     }
 
     @RequestMapping("/logout")

@@ -1,12 +1,8 @@
 package judge.model.binding;
 
-
-import org.hibernate.validator.constraints.Length;
 import judge.constant.Constants;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 public class UserRegisterBindingModel {
 
@@ -19,8 +15,8 @@ public class UserRegisterBindingModel {
     public UserRegisterBindingModel() {
     }
 
-    @NotNull
-    @Length(min = 2, max = 10, message = Constants.USER_NAME_LENGTH_MESSAGE)
+    @NotEmpty
+    @Size(min = 2, max = 10, message = Constants.USER_NAME_LENGTH_MESSAGE)
     public String getUsername() {
         return username;
     }
@@ -29,8 +25,8 @@ public class UserRegisterBindingModel {
         this.username = username;
     }
 
-    @NotNull
-    @Length(min = 3, max = 10, message = Constants.USER_PASSWORD_LENGTH_MESSAGE)
+    @NotEmpty
+    @Size(min = 3, max = 10, message = Constants.USER_PASSWORD_LENGTH_MESSAGE)
     public String getPassword() {
         return password;
     }
@@ -39,7 +35,7 @@ public class UserRegisterBindingModel {
         this.password = password;
     }
 
-    @NotNull
+    @NotEmpty(message = Constants.USER_PASSWORD_CANNOT_BE_EMPTY_MESSAGE)
     public String getConfirmPassword() {
         return confirmPassword;
     }
@@ -48,7 +44,7 @@ public class UserRegisterBindingModel {
         this.confirmPassword = confirmPassword;
     }
 
-    @NotNull
+    @NotEmpty
     @Email
     public String getEmail() {
         return email;
@@ -58,7 +54,8 @@ public class UserRegisterBindingModel {
         this.email = email;
     }
 
-//    @Pattern(regexp = Constants.USER_GIT_PATTERN, message = Constants.USER_GIT_MESSAGE)
+    @NotEmpty
+    @Pattern(regexp = Constants.USER_GIT_PATTERN, message = Constants.USER_GIT_MESSAGE)
     public String getGit() {
         return git;
     }

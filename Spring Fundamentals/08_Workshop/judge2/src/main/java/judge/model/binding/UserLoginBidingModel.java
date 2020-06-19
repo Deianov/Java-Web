@@ -1,7 +1,9 @@
 package judge.model.binding;
 
 
-import javax.validation.constraints.NotNull;
+import judge.constant.Constants;
+
+import javax.validation.constraints.NotEmpty;
 
 public class UserLoginBidingModel {
     private String username;
@@ -10,7 +12,7 @@ public class UserLoginBidingModel {
     public UserLoginBidingModel() {
     }
 
-    @NotNull(message = "Username cannot be null")
+    @NotEmpty(message = Constants.USER_NAME_CANNOT_BE_EMPTY_MESSAGE)
     public String getUsername() {
         return username;
     }
@@ -19,7 +21,7 @@ public class UserLoginBidingModel {
         this.username = username;
     }
 
-    @NotNull(message = "Password cannot be empty!")
+    @NotEmpty(message = Constants.USER_PASSWORD_CANNOT_BE_EMPTY_MESSAGE)
     public String getPassword() {
         return password;
     }
