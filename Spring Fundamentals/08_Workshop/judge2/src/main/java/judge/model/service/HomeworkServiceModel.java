@@ -1,20 +1,14 @@
-package judge.model.binding;
+package judge.model.service;
 
-import judge.constant.Constants;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
-public class HomeworkBindingModel {
-
+public class HomeworkServiceModel {
     private LocalDateTime addedOn = LocalDateTime.now();
     private String git;
     private String author;
-    private ExerciseBindingModel exercise;
+    private ExerciseServiceModel exercise;
 
-    public HomeworkBindingModel() {
+    public HomeworkServiceModel() {
     }
 
     public LocalDateTime getAddedOn() {
@@ -25,8 +19,6 @@ public class HomeworkBindingModel {
         this.addedOn = addedOn;
     }
 
-    @NotEmpty
-    @Pattern(regexp = Constants.USER_GIT_PATTERN, message = Constants.USER_GIT_MESSAGE)
     public String getGit() {
         return git;
     }
@@ -35,7 +27,6 @@ public class HomeworkBindingModel {
         this.git = git;
     }
 
-    @NotNull
     public String getAuthor() {
         return author;
     }
@@ -44,12 +35,11 @@ public class HomeworkBindingModel {
         this.author = author;
     }
 
-    @NotNull
-    public ExerciseBindingModel getExercise() {
+    public ExerciseServiceModel getExercise() {
         return exercise;
     }
 
-    public void setExercise(ExerciseBindingModel exercise) {
+    public void setExercise(ExerciseServiceModel exercise) {
         this.exercise = exercise;
     }
 }

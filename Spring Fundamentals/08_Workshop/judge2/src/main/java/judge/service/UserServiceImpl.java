@@ -1,6 +1,8 @@
 package judge.service;
 
+import judge.constant.Constants;
 import judge.exception.AlreadyExistsException;
+import judge.exception.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +57,45 @@ public class UserServiceImpl implements UserService {
         User user = repository.findByUsernameAndPassword(username, password)
                 .orElseThrow(() -> new NoSuchElementException(USER_LOGIN_INCORRECT_MESSAGE));
         return mapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
+    public boolean isAuthorizedUser(UserServiceModel userServiceModel, String role) {
+        User user = repository.findById(userServiceModel.getId()).orElse(null);
+
+        if (user != null &&
+                user.getUsername().equals(userServiceModel.getUsername()) &&
+                user.getPassword().equals(userServiceModel.getPassword())) {
+
+            if(role != null && !user.getRole().getName().equals(role)) {
+                throw new SecurityException(FAILED_TO_AUTHENTICATE_USER);
+            }
+
+            return true;
+        }
+        throw new EntityNotFoundException(USER_NOT_AUTHORISED_MESSAGE);
+    }
+
+    @Override
+    public void grantAuthority(UserServiceModel admin, String id, String role) {
+        if (isAuthorizedUser(admin, ROLE_ADMIN)) {
+            try {
+                User user = repository.findById(id).orElseThrow();
+                UserServiceModel userServiceModel = mapper.map(user, UserServiceModel.class);
+                userServiceModel.setRole(roleService.findByName(role));
+                repository.save(mapper.map(userServiceModel, User.class));
+
+            } catch (Exception ex) {
+                throw new EntityNotFoundException("Unable to grant authority.");
+            }
+        }
+    }
+
+    @Override
+    public UserServiceModel[] getUsers() {
+        return repository.findAll()
+                .stream()
+                .map(user -> mapper.map(user, UserServiceModel.class))
+                .toArray(UserServiceModel[]::new);
     }
 }

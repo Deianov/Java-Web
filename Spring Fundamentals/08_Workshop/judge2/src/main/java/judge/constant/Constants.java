@@ -10,9 +10,11 @@ public class Constants {
     // roles
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
+    public static final String FAILED_TO_AUTHENTICATE_USER = "Failed to authenticate user";
 
     // user
     public static final String USER_LOGIN_INCORRECT_MESSAGE = "Incorrect username or password";
+    public static final String USER_NOT_AUTHORISED_MESSAGE = "User not Authorised";
 
     public static final String USER_NAME_FIELD = "username";
     public static final String USER_NAME_CANNOT_BE_EMPTY_MESSAGE = "Username cannot be empty";
@@ -38,7 +40,9 @@ public class Constants {
     public static final String USER_GIT_EXISTS_MASSAGE = "An account with this Github address already exists";
 
     // exercise
-    public static final String NAME_LENGTH_MESSAGE = "Name length must be minimum two characters!";
-
-
+    public static final String EXERCISE_NAME_FIELD = "name";
+    public static final String EXERCISE_NAME_CANNOT_BE_EMPTY_MESSAGE = "Exercise Name cannot be empty";
+    public static final int EXERCISE_NAME_LENGTH_MIN = 2;
+    public static final String EXERCISE_NAME_LENGTH_MESSAGE = "Name length must be minimum two characters!";
+    public static final String EXERCISE_NAME_EXISTS_MESSAGE = "Exercise with this name already exists";
 }
