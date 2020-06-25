@@ -36,11 +36,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if(sessionUser != null) {
             UserServiceModel user = (UserServiceModel) sessionUser;
-
             try {
                 return userService.isAuthorizedUser(user, role);
 
-            } catch (EntityNotFoundException e) {
+            } catch (Exception e) {
                 this.message = e.getMessage();
             }
         }

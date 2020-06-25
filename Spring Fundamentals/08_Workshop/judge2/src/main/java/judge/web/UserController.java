@@ -46,11 +46,11 @@ public class UserController {
         try {
             UserServiceModel userServiceModel = userService.login(username, password);
             httpSession.setAttribute("user", userServiceModel);
-            httpSession.setAttribute("id", userServiceModel.getId());
+            httpSession.setAttribute("userId", userServiceModel.getId());
 
         } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("username", username);
-            redirectAttributes.addFlashAttribute("errors", Constants.USER_LOGIN_INCORRECT_MESSAGE);
+            redirectAttributes.addFlashAttribute("errors", Constants.USER_INVALID);
             return "redirect:/users/login";
         }
         return "redirect:/";

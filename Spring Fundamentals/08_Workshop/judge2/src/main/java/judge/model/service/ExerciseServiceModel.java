@@ -1,6 +1,7 @@
 package judge.model.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ExerciseServiceModel extends BaseServiceModel {
 
@@ -33,5 +34,10 @@ public class ExerciseServiceModel extends BaseServiceModel {
 
     public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Exercise: (%s)", this.name);
     }
 }

@@ -32,4 +32,30 @@ public class ExerciseServiceImpl implements ExerciseService {
         Exercise exercise = mapper.map(exerciseServiceModel, Exercise.class);
         repository.saveAndFlush(exercise);
     }
+
+    @Override
+    public ExerciseServiceModel[] getExercises() {
+        return repository.findAll()
+                .stream()
+                .map(exercise -> mapper.map(exercise, ExerciseServiceModel.class))
+                .toArray(ExerciseServiceModel[]::new);
+    }
+
+    @Override
+    public ExerciseServiceModel getExerciseByName(String name) {
+        Exercise exercise = repository.findByName(name).orElse(null);
+        return exercise == null ? null : mapper.map(exercise, ExerciseServiceModel.class);
+    }
+
+    @Override
+    public ExerciseServiceModel getExerciseById(String id) {
+        Exercise exercise = repository.findById(id).orElse(null);
+        return exercise == null ? null : mapper.map(exercise, ExerciseServiceModel.class);
+    }
+
+    @Override
+    public ExerciseServiceModel getLast() {
+        Exercise exercise = repository.getFirstByOrderByDueDateDesc().orElse(null);
+        return exercise == null ? null : mapper.map(exercise, ExerciseServiceModel.class);
+    }
 }

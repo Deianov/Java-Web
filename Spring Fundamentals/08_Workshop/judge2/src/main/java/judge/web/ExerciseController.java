@@ -3,7 +3,6 @@ package judge.web;
 import judge.constant.Constants;
 import judge.exception.AlreadyExistsException;
 import judge.model.binding.ExerciseBindingModel;
-import judge.model.entity.Role;
 import judge.model.service.ExerciseServiceModel;
 import judge.service.AuthenticationService;
 import judge.service.ExerciseService;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -42,19 +39,12 @@ public class ExerciseController {
     public String addExercise(Model model,
                               HttpSession session) {
 
-        try {
-            if(authenticationService.isAuthorizedUser(session, Constants.ROLE_ADMIN)) {
-                if (!model.containsAttribute("exercise")) {
-                    model.addAttribute("exercise", new ExerciseBindingModel());
-                }
-                return "exercise-add";
+        if(authenticationService.isAuthorizedUser(session, Constants.ROLE_ADMIN)) {
+            if (!model.containsAttribute("exercise")) {
+                model.addAttribute("exercise", new ExerciseBindingModel());
             }
-
-        } catch (Exception e) {
-            session.setAttribute("error", e.getMessage());
-            return "redirect:/app/error";
+            return "exercise-add";
         }
-
         return "redirect:/";
     }
 

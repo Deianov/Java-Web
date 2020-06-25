@@ -7,15 +7,15 @@ public class Constants {
     public static final String DATE_CANNOT_BE_IN_PAST = "The date cannot be in the past";
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
-    // roles
+    // roles | login
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
-    public static final String FAILED_TO_AUTHENTICATE_USER = "Failed to authenticate user";
+
+    public static final String AUTHENTICATION_FAILED = "Please check your username/password ...";
+    public static final String USER_UNAUTHORIZED = "Unauthorized user";
+    public static final String USER_INVALID = "Invalid username or password";
 
     // user
-    public static final String USER_LOGIN_INCORRECT_MESSAGE = "Incorrect username or password";
-    public static final String USER_NOT_AUTHORISED_MESSAGE = "User not Authorised";
-
     public static final String USER_NAME_FIELD = "username";
     public static final String USER_NAME_CANNOT_BE_EMPTY_MESSAGE = "Username cannot be empty";
     public static final String USER_NAME_LENGTH_MESSAGE = "Username must be between 2 and 10 characters";
@@ -45,4 +45,11 @@ public class Constants {
     public static final int EXERCISE_NAME_LENGTH_MIN = 2;
     public static final String EXERCISE_NAME_LENGTH_MESSAGE = "Name length must be minimum two characters!";
     public static final String EXERCISE_NAME_EXISTS_MESSAGE = "Exercise with this name already exists";
+
+    // homework
+    public static final String HOMEWORK_GIT_EXISTS_MESSAGE = "This Git address already exists";
+
+    // comments
+    public static final String COMMENT_SCORE = "Score must be between 2 and 6 inclusive";
+    public static final String COMMENT_LENGTH = "Comment text content must be more than 3 characters!";
 }

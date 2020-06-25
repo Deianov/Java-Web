@@ -1,6 +1,8 @@
 package judge.model.binding;
 
 import judge.constant.Constants;
+import judge.model.service.ExerciseServiceModel;
+import judge.model.service.UserServiceModel;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -11,8 +13,8 @@ public class HomeworkBindingModel {
 
     private LocalDateTime addedOn = LocalDateTime.now();
     private String git;
-    private String author;
-    private ExerciseBindingModel exercise;
+    private UserServiceModel author;
+    private ExerciseServiceModel exercise;
 
     public HomeworkBindingModel() {
     }
@@ -35,21 +37,20 @@ public class HomeworkBindingModel {
         this.git = git;
     }
 
-    @NotNull
-    public String getAuthor() {
+    public UserServiceModel getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(UserServiceModel author) {
         this.author = author;
     }
 
     @NotNull
-    public ExerciseBindingModel getExercise() {
+    public ExerciseServiceModel getExercise() {
         return exercise;
     }
 
-    public void setExercise(ExerciseBindingModel exercise) {
+    public void setExercise(ExerciseServiceModel exercise) {
         this.exercise = exercise;
     }
 }

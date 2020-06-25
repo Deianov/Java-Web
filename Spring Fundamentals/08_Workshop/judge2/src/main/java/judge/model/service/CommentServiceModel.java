@@ -1,20 +1,16 @@
-package judge.model.entity;
+package judge.model.service;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "comments")
-public class Comment extends BaseEntity{
-
+public class CommentServiceModel extends BaseServiceModel {
     private int score;
     private String textContent;
-    private User author;
-    private Homework homework;
+    private UserServiceModel author;
+    private HomeworkServiceModel homework;
 
-    public Comment() {
+    public CommentServiceModel() {
     }
 
-    @Column
     public int getScore() {
         return score;
     }
@@ -23,7 +19,6 @@ public class Comment extends BaseEntity{
         this.score = score;
     }
 
-    @Column(name = "text_content", columnDefinition = "TEXT")
     public String getTextContent() {
         return textContent;
     }
@@ -32,21 +27,21 @@ public class Comment extends BaseEntity{
         this.textContent = textContent;
     }
 
-    @ManyToOne
-    public User getAuthor() {
+    @NotNull
+    public UserServiceModel getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserServiceModel author) {
         this.author = author;
     }
 
-    @ManyToOne
-    public Homework getHomework() {
+    @NotNull
+    public HomeworkServiceModel getHomework() {
         return homework;
     }
 
-    public void setHomework(Homework homework) {
+    public void setHomework(HomeworkServiceModel homework) {
         this.homework = homework;
     }
 }

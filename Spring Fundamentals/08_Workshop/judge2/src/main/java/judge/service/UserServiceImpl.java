@@ -55,25 +55,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel login(String username, String password) {
         User user = repository.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new NoSuchElementException(USER_LOGIN_INCORRECT_MESSAGE));
+                .orElseThrow(() -> new NoSuchElementException(Constants.USER_INVALID));
         return mapper.map(user, UserServiceModel.class);
     }
 
     @Override
     public boolean isAuthorizedUser(UserServiceModel userServiceModel, String role) {
+
+        // is logged
+        if (userServiceModel == null) {
+            return false;
+        }
+
+        // exists
         User user = repository.findById(userServiceModel.getId()).orElse(null);
 
-        if (user != null &&
-                user.getUsername().equals(userServiceModel.getUsername()) &&
-                user.getPassword().equals(userServiceModel.getPassword())) {
-
-            if(role != null && !user.getRole().getName().equals(role)) {
-                throw new SecurityException(FAILED_TO_AUTHENTICATE_USER);
-            }
-
-            return true;
+        if (user == null) {
+            return false;
         }
-        throw new EntityNotFoundException(USER_NOT_AUTHORISED_MESSAGE);
+
+        // username and password
+        if (!user.getUsername().equals(userServiceModel.getUsername()) ||
+                !user.getPassword().equals(userServiceModel.getPassword())) {
+            return false;
+        }
+
+        // role (Optional)
+        return role == null || user.getRole().getName().equals(role);
     }
 
     @Override
@@ -88,6 +96,8 @@ public class UserServiceImpl implements UserService {
             } catch (Exception ex) {
                 throw new EntityNotFoundException("Unable to grant authority.");
             }
+        } else {
+            throw new SecurityException(USER_UNAUTHORIZED);
         }
     }
 

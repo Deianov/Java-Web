@@ -4,7 +4,6 @@ import judge.constant.Constants;
 import judge.model.service.UserServiceModel;
 import judge.service.AuthenticationService;
 import judge.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,19 +32,13 @@ public class RoleController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String grantAuthorityForm(Model model,
                                      HttpSession session) {
-        try {
-            if (authenticationService.isAuthorizedUser(session, Constants.ROLE_ADMIN)) {
-                if (!model.containsAttribute("users")) {
-                    model.addAttribute("users", userService.getUsers());
-                }
-                return "role-add";
+
+        if (authenticationService.isAuthorizedUser(session, Constants.ROLE_ADMIN)) {
+            if (!model.containsAttribute("users")) {
+                model.addAttribute("users", userService.getUsers());
             }
-
-        } catch (Exception e) {
-            session.setAttribute("error", e.getMessage());
-            return "redirect:/app/error";
+            return "role-add";
         }
-
         return "redirect:/";
     }
 

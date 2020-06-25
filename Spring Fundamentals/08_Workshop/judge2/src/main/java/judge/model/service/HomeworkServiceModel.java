@@ -1,11 +1,12 @@
 package judge.model.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class HomeworkServiceModel {
+public class HomeworkServiceModel extends BaseServiceModel {
     private LocalDateTime addedOn = LocalDateTime.now();
     private String git;
-    private String author;
+    private UserServiceModel author;
     private ExerciseServiceModel exercise;
 
     public HomeworkServiceModel() {
@@ -27,11 +28,11 @@ public class HomeworkServiceModel {
         this.git = git;
     }
 
-    public String getAuthor() {
+    public UserServiceModel getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(UserServiceModel author) {
         this.author = author;
     }
 
@@ -41,5 +42,16 @@ public class HomeworkServiceModel {
 
     public void setExercise(ExerciseServiceModel exercise) {
         this.exercise = exercise;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(this.exercise.toString())
+                .append(System.lineSeparator())
+                .append(String.format("added on %s",
+                        this.addedOn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                );
+        return result.toString();
     }
 }
