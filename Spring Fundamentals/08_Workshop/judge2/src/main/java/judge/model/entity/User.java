@@ -1,9 +1,7 @@
 package judge.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "users")
@@ -14,8 +12,18 @@ public class User extends BaseEntity {
     private String email;
     private String git;
     private Role role;
+    private Collection<Comment> comments;
 
     public User() {
+    }
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<Comment> comments) {
+        this.comments = comments;
     }
 
     @Column(unique = true, nullable = false)

@@ -31,6 +31,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public boolean isAuthorizedUser(HttpSession session, String role) {
 
+        if(session == null) {
+            return false;
+        }
+
         Object sessionUser = session.getAttribute("user");
         this.message = null;
 

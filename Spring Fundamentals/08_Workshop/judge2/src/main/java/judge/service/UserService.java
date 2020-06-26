@@ -1,6 +1,10 @@
 package judge.service;
 
+import judge.model.entity.User;
 import judge.model.service.UserServiceModel;
+import judge.model.view.UserViewModel;
+
+import java.util.Collection;
 
 
 public interface UserService {
@@ -9,4 +13,10 @@ public interface UserService {
     boolean isAuthorizedUser(UserServiceModel userServiceModel, String role);
     void grantAuthority(UserServiceModel admin, String id, String role);
     UserServiceModel[] getUsers();
+    Collection<UserServiceModel> getTopScored();
+    UserViewModel getById(String id);
+
+    long getCount();
+    double getAverageGrade();
+    double getAverageGradeByUser(User user);
 }

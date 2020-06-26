@@ -2,6 +2,9 @@ package judge.web;
 
 import judge.constant.Constants;
 import judge.exception.AlreadyExistsException;
+import judge.model.view.UserViewModel;
+import judge.service.AuthenticationService;
+import judge.service.HomeworkService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,11 +26,15 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final AuthenticationService authenticationService;
+    private final HomeworkService homeworkService;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService, ModelMapper modelMapper, AuthenticationService authenticationService, HomeworkService homeworkService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.authenticationService = authenticationService;
+        this.homeworkService = homeworkService;
     }
 
     @GetMapping("/login")
@@ -67,33 +74,37 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerConfirm(@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel bindingModel,
-                                  BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) {
-        boolean doRedirect = false;
+                                  BindingResult result,
+                                  RedirectAttributes attributes) {
 
-        if (bindingResult.hasErrors()) {
-            doRedirect = true;
-        } else if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())) {
-            doRedirect = true;
-            bindingResult.rejectValue("confirmPassword", "error.userRegisterBindingModel", Constants.USER_PASSWORDS_DOES_NOT_MATCH_MESSAGE);
-        } else {
+        if(bindingModel == null || result == null || attributes == null) {
+            return "redirect:/";
+        }
+
+        // add custom error
+        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())) {
+            result.rejectValue("confirmPassword", "error.userRegisterBindingModel", Constants.USER_PASSWORDS_DOES_NOT_MATCH_MESSAGE);
+        }
+
+        // create user if not errors
+        if (!result.hasErrors()) {
             try {
                 this.userService.registerUser(this.modelMapper.map(bindingModel, UserServiceModel.class));
 
             } catch (AlreadyExistsException ex) {
-                doRedirect = true;
-                bindingResult.rejectValue(ex.getField(), "error.userRegisterBindingModel", ex.getMessage());
+                // add service error
+                result.rejectValue(ex.getField(), "error.userRegisterBindingModel", ex.getMessage());
 
             } catch (Exception ex) {
-                doRedirect = true;
-                redirectAttributes.addFlashAttribute("unableToRegister", Constants.USER_REGISTER_EXCEPTION_MESSAGE);
+                return "redirect:/";
             }
         }
 
-        if (doRedirect) {
-            redirectAttributes.addFlashAttribute("userRegisterBindingModel", bindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel", bindingResult);
-            return "redirect:/users/register";
+        // redirect and show errors: custom, binding or service
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("userRegisterBindingModel", bindingModel);
+            attributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel", result);
+            return "redirect:/users/register2";
         }
         return "redirect:/users/login";
     }
@@ -102,5 +113,34 @@ public class UserController {
     public String logout(HttpSession httpSession) {
         httpSession.invalidate();
         return "redirect:/";
+    }
+
+    @RequestMapping("/profile")
+    public String currentProfile(Model model,
+                                 HttpSession session) {
+
+        if(!authenticationService.isAuthorizedUser(session)){
+            return "redirect:/";
+        }
+
+        UserViewModel user = userService.getById((String) session.getAttribute("userId"));
+        user.setHomework(homeworkService.getHomework((String) session.getAttribute("userId")));
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
+    @RequestMapping("/profile/{id}")
+    public String userProfile(Model model,
+                              HttpSession session,
+                              @PathVariable("id") String id) {
+
+        if(!authenticationService.isAuthorizedUser(session, Constants.ROLE_ADMIN)){
+            return "redirect:/users/profile";
+        }
+
+        UserViewModel user = userService.getById(id);
+        user.setHomework(homeworkService.getHomework(id));
+        model.addAttribute("user", user);
+        return "profile";
     }
 }

@@ -3,6 +3,8 @@ package judge.service;
 import judge.constant.Constants;
 import judge.exception.AlreadyExistsException;
 import judge.exception.EntityNotFoundException;
+import judge.model.entity.Comment;
+import judge.model.view.UserViewModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,10 @@ import judge.model.entity.User;
 import judge.model.service.UserServiceModel;
 import judge.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static judge.constant.Constants.*;
 import static judge.constant.Constants.ROLE_ADMIN;
@@ -107,5 +112,38 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> mapper.map(user, UserServiceModel.class))
                 .toArray(UserServiceModel[]::new);
+    }
+
+    @Override
+    public Collection<UserServiceModel> getTopScored() {
+        return repository.findAllByScore()
+                .stream()
+                .map(user -> mapper.map(user, UserServiceModel.class))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public UserViewModel getById(String id) {
+        User user = repository.findById(id).orElse(null);
+        return user == null ? null : mapper.map(user, UserViewModel.class);
+    }
+
+    @Override
+    public long getCount() {
+        return repository.count();
+    }
+
+    @Override
+    public double getAverageGrade() {
+        return repository.findAll()
+                .stream()
+                .mapToDouble(this::getAverageGradeByUser)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    public double getAverageGradeByUser(User user) {
+        return user.getComments().stream().mapToDouble(Comment::getScore).average().orElse(0.0);
     }
 }

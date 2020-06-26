@@ -13,5 +13,6 @@ public interface HomeworkRepository extends JpaRepository<Homework, String> {
     Optional<Homework> findFirstByAuthor_IdAndExercise_Name (String authorId, String name);
     Optional<Homework> findFirstByAuthor_IdOrderByAddedOnDesc(String authorId);
     Collection<Homework> findAllByGit(String git);
+    Collection<Homework> findAllByAuthor_Id(String authorId);
     List<Homework> findAllByExercise_Id(String exerciseId);
 }

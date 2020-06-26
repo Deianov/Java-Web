@@ -118,9 +118,9 @@ public class HomeworkController {
 
         if (session.getAttribute(COMMENT_BINDING_MODEL) == null) {
             // first time
-            // random homework, skip current user
+            // loll rated homework
             HomeworkServiceModel homework = homeworkService
-                    .getRandom(((UserServiceModel) session.getAttribute("user")).getId());
+                    .getOneToCheck(((UserServiceModel) session.getAttribute("user")).getId());
 
             session.setAttribute("git", homework == null ? null : homework.getGit());
             session.setAttribute("homework", homework);
@@ -152,13 +152,15 @@ public class HomeworkController {
 
             session.removeAttribute(COMMENT_BINDING_MODEL);
             session.removeAttribute(COMMENT_BINDING_RESULT);
+            session.removeAttribute("homework");
             session.removeAttribute("git");
         }
 
         if(result.hasErrors()) {
             session.setAttribute(COMMENT_BINDING_MODEL, bindingModel);
             session.setAttribute(COMMENT_BINDING_RESULT, result);
+            return "redirect:/homework/check";
         }
-        return "redirect:/homework/check";
+        return "redirect:/home";
     }
 }

@@ -7,5 +7,6 @@ public interface HomeworkService {
     void addHomework(HomeworkServiceModel homeworkServiceModel);
     void addCommentToHomework(CommentServiceModel commentServiceModel);
     HomeworkServiceModel getLastAdded(String authorId);
-    HomeworkServiceModel getRandom(String currentUserId);
+    HomeworkServiceModel getOneToCheck(String currentUserId);
+    String getHomework(String userId);
 }

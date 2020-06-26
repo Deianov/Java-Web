@@ -27,7 +27,7 @@
                 <a class="nav-link" href="/homework/add">Add Homework</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/profile/{id}">Profile</a>
+                <a class="nav-link" th:href="@{/users/profile/{id}(id=${session.userId})}">Profile</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -42,7 +42,7 @@
                 </a>
             </li>
             <li th:if="${session.user}" class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/users/profile">
                     <span class="font-weight-bold" th:text="'Hello (' + ${session.user.getUsername()} + ')'">Hello (username)</span>
                 </a>
             </li>

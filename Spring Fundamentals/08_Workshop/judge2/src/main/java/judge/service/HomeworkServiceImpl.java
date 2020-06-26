@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -92,25 +94,36 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public HomeworkServiceModel getRandom(String currentUserId) {
+    public HomeworkServiceModel getOneToCheck(String currentUserId) {
 
         ExerciseServiceModel lastExercise = exerciseService.getLast();
 
         if (lastExercise != null &&
                 lastExercise.getDueDate().isAfter(LocalDateTime.now())) {
 
-            // remove current user
-            List<Homework> collection =
-                    repository.findAllByExercise_Id(lastExercise.getId())
+            Homework homework = repository.findAllByExercise_Id(lastExercise.getId())
                     .stream()
-                    .filter(homework -> !homework.getAuthor().getId().equals(currentUserId))
-                    .collect(Collectors.toList());
+                    // remove current user
+                    .filter(h -> !h.getAuthor().getId().equals(currentUserId))
+                    // min comments
+                    .min(Comparator.comparingLong(commentService::getCountByHomework))
+                    .orElse(null);
 
-            if (!collection.isEmpty()) {
-                int index = ThreadLocalRandom.current().nextInt(collection.size());
-                return mapper.map(collection.get(index),HomeworkServiceModel.class );
+            if(homework != null) {
+                return mapper.map(homework, HomeworkServiceModel.class);
             }
         }
         return null;
+    }
+
+    @Override
+    public String getHomework(String userId) {
+        Collection<Homework> collection = repository.findAllByAuthor_Id(userId);
+        String result = collection
+                .stream()
+                .map(homework -> mapper.map(homework, HomeworkServiceModel.class))
+                .map(HomeworkServiceModel::toString)
+                .collect(Collectors.joining(System.lineSeparator()));
+        return result;
     }
 }

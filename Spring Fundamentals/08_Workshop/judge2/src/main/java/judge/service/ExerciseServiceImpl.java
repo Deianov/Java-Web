@@ -9,6 +9,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
 
@@ -38,6 +42,13 @@ public class ExerciseServiceImpl implements ExerciseService {
         return repository.findAll()
                 .stream()
                 .map(exercise -> mapper.map(exercise, ExerciseServiceModel.class))
+                .toArray(ExerciseServiceModel[]::new);
+    }
+
+    @Override
+    public ExerciseServiceModel[] getActiveExercises() {
+        return Arrays.stream(this.getExercises())
+                .filter(ex -> ex.getDueDate().isAfter(LocalDateTime.now()))
                 .toArray(ExerciseServiceModel[]::new);
     }
 
