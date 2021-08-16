@@ -1,0 +1,35 @@
+spring:
+    #Data Source Properties
+    datasource:
+        url: "jdbc:mysql://localhost:3306/warehouse_db?serverTimezone=UTC&characterEncoding=UTF-8&sslMode=DISABLED&createDatabaseIfNotExist=true"
+        username: "root"
+        password: "1234"
+        continueOnError: true
+        driver-class-name: "com.mysql.cj.jdbc.Driver"
+    #JPA Properties
+    jpa:
+        database-platform: "org.hibernate.dialect.MySQL8Dialect"
+        hibernate:
+            ddl-auto: update
+        open-in-view: false
+        show-sql: false
+    #Thymeleaf
+    thymeleaf:
+        cache: false
+
+#Logging Levels
+logging:
+    level:
+        #Disable the default loggers
+#        org: warn
+#        blog: warn
+        org.springframework:
+            security: debug
+#            web.servlet.DispatcherServlet: debug
+
+#        org.hibernate:
+#            SQL: debug
+#            type.descriptor.sql.BasicBinder: trace
+
+#server:
+#  port: 8000
