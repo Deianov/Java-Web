@@ -1,0 +1,11 @@
+server:
+    port: 9999
+    
+tokenservice:
+    checkTokenEndpointUrl: http://localhost:8080/oauth/check_token
+    clientId: foo
+    clientSecret: ""    
+    
+logging:
+  level:
+    org.springframework.security: DEBUG
