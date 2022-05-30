@@ -1,0 +1,17 @@
+version: "3"
+services:
+    db:
+        image: mysql:8
+        container_name: mysql
+        ports:
+            - 3307:3306
+        command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin' ]
+        networks:
+            - docker3net
+        environment:
+            - MYSQL_ALLOW_EMPTY_PASSWORD=null
+            - MYSQL_INITDB_SKIP_TZINFO=1
+            - MYSQL_DATABASE=docker_db
+            - MYSQL_ROOT_PASSWORD=1234
+networks:
+    docker3net:
