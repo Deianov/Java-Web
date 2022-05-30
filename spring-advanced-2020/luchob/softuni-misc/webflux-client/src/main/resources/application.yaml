@@ -1,0 +1,7 @@
+softuni:
+  webflux:
+    client:
+      schema: http
+      host: localhost
+      port: 8081
+

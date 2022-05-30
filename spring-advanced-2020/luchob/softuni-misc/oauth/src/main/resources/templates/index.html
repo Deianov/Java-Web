@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Demo</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+
+</head>
+<body>
+<h1 class="text-center">Login with Facebook, GitHub or Google</h1>
+<div class="container text-danger error"></div>
+<div class="col-md-2 container unauthenticated mt-5">
+    <a class="btn btn-primary btn-sm" rel="publisher"
+       href="/oauth2/authorization/facebook">
+        <i class="fa fa-facebook"></i>
+    </a>
+    <a class="btn btn-dark btn-sm" rel="publisher"
+       href="/oauth2/authorization/github">
+        <i class="fa fa-github"></i>
+    </a>
+    <a class="btn btn-danger btn-sm" rel="publisher"
+       href="/oauth2/authorization/google">
+        <i class="fa fa-google-plus"></i>
+    </a>
+</div>
+
+<div class="container authenticated" style="display:none">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="card hovercard">
+                    <div class="cardheader">
+                    </div>
+                    <div class="avatar">
+                        <img id="url" alt="Image" src="" >
+                    </div>
+                    <div class="info">
+                        <div class="title">
+                            <a target="_blank" href="https://scripteden.com/">
+                                Test</a>
+                        </div>
+                        <div id="username" class="desc">Name: </div>
+                        <div id="userId" class="desc">Id: </div>
+                        <div id="email" class="desc">Email: </div>
+                    </div>
+                    <div class="bottom">
+                        <a class="btn btn-primary btn-twitter btn-sm" href="https://twitter.com/webmaniac">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm" rel="publisher"
+                           href="https://plus.google.com/+ahmshahnuralam">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm" rel="publisher"
+                           href="https://plus.google.com/shahnuralam">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a class="btn btn-dark btn-sm" rel="publisher" href="https://plus.google.com/shahnuralam">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <button onClick="logout()" class="rounded">Logout</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $.get("/user", function (data) {
+        console.log(data);
+        $("#username").html(data.username);
+        $("#userId").html(data.id);
+        $("#email").html(data.mail);
+        // $("#url").src(data.url);
+        document.getElementById("url").src = data.url;
+        $(".unauthenticated").hide()
+        $(".authenticated").show()
+    });
+
+    var logout = function () {
+        $.get("/logout");
+        window.location.replace("http://localhost:8080/");
+    }
+
+    $.get("/error", function(data) {
+        if (data) {
+            $(".error").html(data);
+        } else {
+            $(".error").html('');
+        }
+    });
+</script>
+</body>
+</html>

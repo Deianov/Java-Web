@@ -1,0 +1,9 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: softuni-nginx
+    volumes:
+      - ./html:/usr/share/nginx/html
+    ports:
+      - 80:80
